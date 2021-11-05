@@ -2,9 +2,14 @@
 
 The focus is on RK/K*/phi analyses.
 
+## More info
+
+https://codimd.web.cern.ch/mKQBQ3ErQ9uKMr4TdS1udA?both
+
 ## Getting started
 
 ```shell
+SCRAM_ARCH=slc7_amd64_gcc700
 cmsrel CMSSW_10_2_15
 cd CMSSW_10_2_15/src
 cmsenv
