@@ -1,11 +1,12 @@
 from CRABClient.UserUtilities import config, ClientException, getUsernameFromCRIC
+
 #from input_crab_data import dataset_files
 import yaml
 import datetime
 from fnmatch import fnmatch
 from argparse import ArgumentParser
 
-production_tag = datetime.date.today().strftime('%Y%b%d')
+production_tag = "v01_"+datetime.date.today().strftime('%Y%b%d')
 
 config = config()
 config.section_('General')
@@ -15,7 +16,9 @@ config.General.workArea = 'BParkingNANO_%s' % production_tag
 
 config.section_('Data')
 config.Data.publication = False
-config.Data.outLFNDirBase = '/store/group/phys_bphys/bpark/nanoaod_RK2021/%s' % (config.General.workArea)
+# config.Data.outLFNDirBase = '/store/group/phys_bphys/bpark/nanoaod_RK2021/%s' % (config.General.workArea)
+my_cern_username = getUsernameFromCRIC()
+config.Data.outLFNDirBase = '/store/user/' + my_cern_username + '/buffer/%s' % (config.General.workArea)
 config.Data.inputDBS = 'global'
 
 config.section_('JobType')

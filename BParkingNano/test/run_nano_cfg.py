@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 
 options = VarParsing('python')
 
-options.register('isMC', False,
+options.register('isMC', True,
     VarParsing.multiplicity.singleton,
     VarParsing.varType.bool,
     "Run this on real data"
