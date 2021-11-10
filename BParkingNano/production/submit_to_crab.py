@@ -6,7 +6,7 @@ import datetime
 from fnmatch import fnmatch
 from argparse import ArgumentParser
 
-production_tag = "v01_"+datetime.date.today().strftime('%Y%b%d')
+production_tag = "v03_"+datetime.date.today().strftime('%Y%b%d')
 
 config = config()
 config.section_('General')
@@ -24,7 +24,7 @@ config.Data.inputDBS = 'global'
 config.section_('JobType')
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = '../test/run_nano_cfg.py'
-config.JobType.maxJobRuntimeMin = 3000
+# config.JobType.maxJobRuntimeMin = 2750
 config.JobType.allowUndistributedCMSSW = True
 config.JobType.inputFiles = ["../test/lowPtEleReg_2018_02062020_nv.db"]
 
@@ -76,7 +76,8 @@ if __name__ == '__main__':
 
         config.General.requestName = name
         common_branch = 'mc' if isMC else 'data'
-        config.Data.splitting = 'FileBased' if isMC else 'LumiBased'
+        # config.Data.splitting = 'FileBased' if isMC else 'LumiBased'
+        config.Data.splitting = 'Automatic'
         if not isMC:
             config.Data.lumiMask = info.get(
                 'lumimask', 

@@ -1,7 +1,7 @@
 common:
   data:
     lumimask : /afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions18/13TeV/ReReco/Cert_314472-325175_13TeV_17SeptEarlyReReco2018ABC_PromptEraD_Collisions18_JSON.txt
-    splitting: 20
+    splitting: 300
     globaltag: 102X_dataRun2_v11
   mc:
     splitting: 1
@@ -46,7 +46,7 @@ samples:
       - 1
       - 2
       - 3
-      - 4
+      # - 4
       - 5
   
   #
