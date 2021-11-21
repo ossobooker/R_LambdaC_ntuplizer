@@ -17,6 +17,7 @@ cd CMSSW_10_2_27/src
 cmsenv
 source /cvmfs/cms.cern.ch/common/crab-setup.sh
 git cms-init
+pip install --user yapf
 ```
 
 ## Quick Start
@@ -24,7 +25,6 @@ git cms-init
 ```
 source setup_env.sh
 ```
-
 
 ## Add low-pT energy ID and regression
 
