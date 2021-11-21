@@ -19,13 +19,6 @@ source /cvmfs/cms.cern.ch/common/crab-setup.sh
 git cms-init
 pip install --user yapf
 ```
-
-## Quick Start
-
-```
-source setup_env.sh
-```
-
 ## Add low-pT energy ID and regression
 
 The ID model is `2020Sept15` (depth=15, ntrees=1000).
@@ -76,6 +69,19 @@ cd PhysicsTools/BParkingNano/test/
 cmsenv 
 cmsRun run_nano_cfg.py
 ```
+## Quick Start
+
+```
+source setup_env.sh
+```
+
+## Important: Mass hypothesis
+
+| 1st hypothesis | 2nd hypothesis | 3rd hypothesis | 4thhypothesis |
+|----------------|----------------|----------------|---------------|
+| PROTON         | PROTON         | PION           | KAON          |
+| KAON           | PIONPION       | KAPKAON        | PROTON        |
+| PION           | KAON           | PROTON         | PION          |
 
 ## Contributing
 
