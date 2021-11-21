@@ -11,10 +11,11 @@ https://codimd.web.cern.ch/mKQBQ3ErQ9uKMr4TdS1udA?both
 ## Getting started
 
 ```shell
-SCRAM_ARCH=slc7_amd64_gcc700
-cmsrel CMSSW_10_2_15
-cd CMSSW_10_2_15/src
+export SCRAM_ARCH=slc7_amd64_gcc700
+cmsrel CMSSW_10_2_27
+cd CMSSW_10_2_27/src
 cmsenv
+source /cvmfs/cms.cern.ch/common/crab-setup.sh
 git cms-init
 ```
 
