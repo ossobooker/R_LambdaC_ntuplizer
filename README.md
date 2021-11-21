@@ -8,7 +8,7 @@ The focus is on R($\Lambda_{c}^{(*)}$) analyses.
 
 https://codimd.web.cern.ch/mKQBQ3ErQ9uKMr4TdS1udA?both
 
-## Getting started
+## Setup Env
 
 ```shell
 export SCRAM_ARCH=slc7_amd64_gcc700
@@ -18,6 +18,13 @@ cmsenv
 source /cvmfs/cms.cern.ch/common/crab-setup.sh
 git cms-init
 ```
+
+## Quick Start
+
+```
+source setup_env.sh
+```
+
 
 ## Add low-pT energy ID and regression
 
