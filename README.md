@@ -2,7 +2,7 @@
 
 Forked from: https://github.com/CMSBParking/BParkingNANO
 
-The focus is on R(Lambda_c^(*)) analyses.
+The focus is on R($\Lambda_{c}^{(*)}$) analyses.
 
 ## More info
 
