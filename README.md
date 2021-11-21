@@ -1,6 +1,8 @@
 # nanoAOD producer customized for BParking analysis 
 
-The focus is on RK/K*/phi analyses.
+Forked from: https://github.com/CMSBParking/BParkingNANO
+
+The focus is on R(Lambda_c^(*)) analyses.
 
 ## More info
 
