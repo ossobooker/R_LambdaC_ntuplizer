@@ -80,7 +80,7 @@ source setup_env.sh
 | 1st hypothesis | 2nd hypothesis | 3rd hypothesis | 4thhypothesis |
 |----------------|----------------|----------------|---------------|
 | PROTON         | PROTON         | PION           | KAON          |
-| KAON           | PIONPION       | KAPKAON        | PROTON        |
+| KAON           | PION           | KAON           | PROTON        |
 | PION           | KAON           | PROTON         | PION          |
 
 ## Contributing
