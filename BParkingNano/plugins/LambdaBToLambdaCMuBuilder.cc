@@ -128,7 +128,7 @@ void LambdaBToLambdaCMuBuilder::produce(edm::StreamID, edm::Event &evt, edm::Eve
       // int l1_idx = muon_ptr->userInt("l1_idx");
       // int l2_idx = muon_ptr->userInt("l2_idx");
 
-      // filter on chrge
+      // filter on charge
       if (std::abs(muon_ptr->charge() + lambda_c_ptr->charge()) != 0)
         continue;
 
@@ -136,21 +136,6 @@ void LambdaBToLambdaCMuBuilder::produce(edm::StreamID, edm::Event &evt, edm::Eve
       pat::CompositeCandidate cand;
       cand.setP4(muon_ptr->p4() + lambda_c_ptr->p4());
       cand.setCharge(0); //Lambda_B has 0 charge
-
-      //2dn mass hypothesis
-      auto lambda_c_1barP4 = lambda_c_ptr->polarP4();
-      lambda_c_1barP4.SetM(lambda_c_ptr->userFloat("1barMass"));
-      cand.addUserFloat("1barMass", (muon_ptr->polarP4() + lambda_c_1barP4).M());
-
-      //3rd mass hypothesis
-      auto lambda_c_2barP4 = lambda_c_ptr->polarP4();
-      lambda_c_2barP4.SetM(lambda_c_ptr->userFloat("2barMass"));
-      cand.addUserFloat("2barMass", (muon_ptr->polarP4() + lambda_c_2barP4).M());
-
-      //4th mass hypothesis
-      auto lambda_c_3barP4 = lambda_c_ptr->polarP4();
-      lambda_c_3barP4.SetM(lambda_c_ptr->userFloat("3barMass"));
-      cand.addUserFloat("3barMass", (muon_ptr->polarP4() + lambda_c_3barP4).M());
 
       // save daughters - unfitted
       cand.addUserCand("trk1", trk1_ptr);
@@ -177,7 +162,7 @@ void LambdaBToLambdaCMuBuilder::produce(edm::StreamID, edm::Event &evt, edm::Eve
       KinVtxFitter fitter(
           {lambdas_c_ttracks->at(trk1_idx), lambdas_c_ttracks->at(trk2_idx),
            lambdas_c_ttracks->at(trk3_idx), muon_ttracks->at(muon_idx)},
-          {PROTON_MASS, K_MASS, PI_MASS, muon_ptr->mass()},
+          {trk1_ptr->mass(), trk2_ptr->mass(), trk3_ptr->mass(), muon_ptr->mass()},
           {PROTON_SIGMA, K_SIGMA, PI_SIGMA, LEP_SIGMA} //K_SIGMA == PI_SIGMA == PROTON_SIGMA
       );
 
@@ -197,10 +182,10 @@ void LambdaBToLambdaCMuBuilder::produce(edm::StreamID, edm::Event &evt, edm::Eve
       cand.addUserFloat("sv_prob", fitter.prob());
 
       // refitted kinematic vars
-      cand.addUserFloat("fitted_lambda_c_mass", (fitter.daughter_p4(0) + fitter.daughter_p4(1)).mass());
-      cand.addUserFloat("fitted_lambda_c_pt", (fitter.daughter_p4(0) + fitter.daughter_p4(1)).pt());
-      cand.addUserFloat("fitted_lambda_c_eta", (fitter.daughter_p4(0) + fitter.daughter_p4(1)).eta());
-      cand.addUserFloat("fitted_lambda_c_phi", (fitter.daughter_p4(0) + fitter.daughter_p4(1)).phi());
+      cand.addUserFloat("fitted_lambda_c_mass", (fitter.daughter_p4(0) + fitter.daughter_p4(1) + fitter.daughter_p4(2)).mass());
+      cand.addUserFloat("fitted_lambda_c_pt", (fitter.daughter_p4(0) + fitter.daughter_p4(1) + fitter.daughter_p4(2)).pt());
+      cand.addUserFloat("fitted_lambda_c_eta", (fitter.daughter_p4(0) + fitter.daughter_p4(1) + fitter.daughter_p4(2)).eta());
+      cand.addUserFloat("fitted_lambda_c_phi", (fitter.daughter_p4(0) + fitter.daughter_p4(1) + fitter.daughter_p4(2)).phi());
 
       auto fit_p4 = fitter.fitted_p4();
       cand.addUserFloat("fitted_pt", fit_p4.pt());
@@ -231,36 +216,6 @@ void LambdaBToLambdaCMuBuilder::produce(edm::StreamID, edm::Event &evt, edm::Eve
       cand.addUserFloat("l_xy", lxy.value());
       cand.addUserFloat("l_xy_unc", lxy.error());
 
-      // 2nd mass hypothesis
-      auto trk1p4 = fitter.daughter_p4(0);
-      auto trk2p4 = fitter.daughter_p4(1);
-      auto trk3p4 = fitter.daughter_p4(2);
-      trk1p4.SetM(PROTON_MASS);
-      trk2p4.SetM(PI_MASS);
-      trk3p4.SetM(K_MASS);
-      cand.addUserFloat("1barMasslambda_c_fullfit", (trk1p4 + trk2p4 + trk3p4).M());
-      cand.addUserFloat("fitted_1barMass", (trk1p4 + trk2p4 + trk3p4 + fitter.daughter_p4(3)).M());
-
-      // 3rd mass hypothesis
-      trk1p4 = fitter.daughter_p4(0);
-      trk2p4 = fitter.daughter_p4(1);
-      trk3p4 = fitter.daughter_p4(2);
-      trk1p4.SetM(PI_MASS);
-      trk2p4.SetM(K_MASS);
-      trk3p4.SetM(PROTON_MASS);
-      cand.addUserFloat("2barMasslambda_c_fullfit", (trk1p4 + trk2p4 + trk3p4).M());
-      cand.addUserFloat("fitted_2barMass", (trk1p4 + trk2p4 + trk3p4 + fitter.daughter_p4(3)).M());
-
-      // 4th mass hypothesis
-      trk1p4 = fitter.daughter_p4(0);
-      trk2p4 = fitter.daughter_p4(1);
-      trk3p4 = fitter.daughter_p4(2);
-      trk1p4.SetM(K_MASS);
-      trk2p4.SetM(PROTON_MASS);
-      trk3p4.SetM(PI_MASS);
-      cand.addUserFloat("3barMasslambda_c_fullfit", (trk1p4 + trk2p4 + trk3p4).M());
-      cand.addUserFloat("fitted_3barMass", (trk1p4 + trk2p4 + trk3p4 + fitter.daughter_p4(3)).M());
-
       // post fit selection
       if (!post_vtx_selection_(cand))
         continue;
@@ -279,7 +234,6 @@ void LambdaBToLambdaCMuBuilder::produce(edm::StreamID, edm::Event &evt, edm::Eve
 
       for (unsigned int iTrk = 0; iTrk < totalTracks; ++iTrk)
       {
-
         const pat::PackedCandidate &trk = (iTrk < nTracks) ? (*iso_tracks)[iTrk] : (*iso_lostTracks)[iTrk - nTracks];
         // define selections for iso tracks (pT, eta, ...)
         if (!isotrk_selection_(trk))

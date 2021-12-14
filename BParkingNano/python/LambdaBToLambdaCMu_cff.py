@@ -22,19 +22,19 @@ LambdaCToProtonKPi = cms.EDProducer(
     'LambdaCBuilder',
     pfcands=cms.InputTag('tracksBPark', 'SelectedTracks'),
     transientTracks=cms.InputTag('tracksBPark', 'SelectedTransientTracks'),
-    trk1Selection=cms.string('pt > 0.5 && abs(eta)<2.4'),  #need optimization   
+    trk1Selection=cms.string(
+        'pt > 0.5 && abs(eta)<2.4'),  #need optimization   
     trk2Selection=cms.string('pt > 0.5 && abs(eta)<2.4'),  #need optimization
     trk3Selection=cms.string('pt > 0.5 && abs(eta)<2.4'),  #need optimization
     preVtxSelection=cms.string(
         '(abs(userCand("trk1").vz - userCand("trk2").vz) < 1.0 && abs(userCand("trk1").vz - userCand("trk3").vz) < 1.0 && abs(userCand("trk2").vz - userCand("trk3").vz) < 1.0)'
-        '&& pt() > 2.0 '
+        '&& pt() > 1.0 '
         '&&  (mass() < 2.4 && mass() > 2.1) '),
     postVtxSelection=cms.string(
         'userFloat("sv_prob") > 1.e-5'
-        ' && (userFloat("fitted_mass")<2.4 && userFloat("fitted_mass")>2.1)')
-)
+        ' && (userFloat("fitted_mass")<2.4 && userFloat("fitted_mass")>2.1)'))
 
-# Lambda_B
+# Lambda_B (semileptonic decay)
 LambdaBToLambdaCMu = cms.EDProducer(
     'LambdaBToLambdaCMuBuilder',
     muons=cms.InputTag('muonTrgSelector', 'SelectedMuons'),
@@ -48,20 +48,13 @@ LambdaBToLambdaCMu = cms.EDProducer(
     lostTracks=cms.InputTag("lostTracks"),
     isoTracksSelection=cms.string('pt > 0.7 && abs(eta)<2.5'),
     beamSpot=cms.InputTag("offlineBeamSpot"),
-    preVtxSelection=cms.string(
-        'pt > 3. && userFloat("min_dr") > 0.03'
-        '&& ( (mass < 7. && mass > 4.) '
-        '|| (userFloat("1barMass")<7. && userFloat("1barMass")>4.) '
-        '|| (userFloat("2barMass")<7. && userFloat("2barMass")>4.) '
-        '|| (userFloat("3barMass")<7. && userFloat("3barMass")>4.) )'),
+    preVtxSelection=cms.string('pt > 3. && userFloat("min_dr") > 0.03'
+                               '&&  (mass < 7. && mass > 4.) '),
     postVtxSelection=cms.string(
         'userFloat("sv_prob") > 0.001 '
         '&& userFloat("fitted_cos_theta_2D") >= 0'
-        '&& ( (userFloat("fitted_mass") > 4 && userFloat("fitted_mass") < 7.)'
-        '|| (userFloat("fitted_1barMass") > 4 && userFloat("fitted_1barMass") < 7.) '
-        '|| (userFloat("fitted_2barMass") > 4 && userFloat("fitted_2barMass") < 7.)  '
-        '|| (userFloat("fitted_3barMass") > 4 && userFloat("fitted_3barMass") < 7.) )'
-    ))
+        '&& ( (userFloat("fitted_mass") > 4 && userFloat("fitted_mass") < 7.)')
+)
 
 ################################### Tables #####################################
 
@@ -122,21 +115,6 @@ LambdaBToLambdaCMuTable = cms.EDProducer(
         fit_pt=ufloat('fitted_pt'),
         fit_eta=ufloat('fitted_eta'),
         fit_phi=ufloat('fitted_phi'),
-
-        # 2dn mass hypothesis
-        nofit_1barMass=ufloat('1barMass'),
-        fit_1barMass=ufloat('fitted_1barMass'),
-        fit_1barLambda_c_mass=ufloat('1barMasslambda_c_fullfit'),
-
-        # 3rd mass hypothesis
-        nofit_2barMass=ufloat('2barMass'),
-        fit_2barMass=ufloat('fitted_2barMass'),
-        fit_2barLambda_c_mass=ufloat('2barMasslambda_c_fullfit'),
-
-        # 4th mass hypothesis
-        nofit_3barMass=ufloat('3barMass'),
-        fit_3barMass=ufloat('fitted_3barMass'),
-        fit_3barLambda_c_mass=ufloat('3barMasslambda_c_fullfit'),
 
         # post-fit tracks/leptons
         #muon
