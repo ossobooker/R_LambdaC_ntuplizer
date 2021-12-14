@@ -28,17 +28,11 @@ LambdaCToProtonKPi = cms.EDProducer(
     preVtxSelection=cms.string(
         '(abs(userCand("trk1").vz - userCand("trk2").vz) < 1.0 && abs(userCand("trk1").vz - userCand("trk3").vz) < 1.0 && abs(userCand("trk2").vz - userCand("trk3").vz) < 1.0)'
         '&& pt() > 2.0 '
-        '&& (  (mass() < 2.4 && mass() > 2.1) '
-        '|| (userFloat("1barMass") < 2.4 && userFloat("1barMass") > 2.1) '
-        '|| (userFloat("2barMass") < 2.4 && userFloat("2barMass") > 2.1) '
-        '|| (userFloat("3barMass") < 2.4 && userFloat("3barMass") > 2.1)  )'),
+        '&&  (mass() < 2.4 && mass() > 2.1) '),
     postVtxSelection=cms.string(
         'userFloat("sv_prob") > 1.e-5'
-        ' && (  (userFloat("fitted_mass")<2.4 && userFloat("fitted_mass")>2.1)'
-        ' || (userFloat("fitted_1barMass")<2.4 && userFloat("fitted_1barMass")>2.1)'
-        ' || (userFloat("fitted_2barMass")<2.4 && userFloat("fitted_2barMass")>2.1)'
-        ' || (userFloat("fitted_3barMass")<2.4 && userFloat("fitted_3barMass")>2.1)  )'
-    ))
+        ' && (userFloat("fitted_mass")<2.4 && userFloat("fitted_mass")>2.1)')
+)
 
 # Lambda_B
 LambdaBToLambdaCMu = cms.EDProducer(
