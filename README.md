@@ -19,7 +19,7 @@ source /cvmfs/cms.cern.ch/common/crab-setup.sh
 git cms-init
 pip install --user yapf
 ```
-## Add low-pT energy ID and regression
+<!-- ## Add low-pT energy ID and regression
 
 The ID model is `2020Sept15` (depth=15, ntrees=1000).
 
@@ -34,19 +34,19 @@ To run on CRAB, the following three lines __must__ be executed:
 git cms-addpkg RecoEgamma/ElectronIdentification
 mkdir -p $CMSSW_BASE/src/RecoEgamma/ElectronIdentification/data/LowPtElectrons
 cp $CMSSW_BASE/external/$SCRAM_ARCH/data/RecoEgamma/ElectronIdentification/data/LowPtElectrons/LowPtElectrons_ID_2020Sept15.root $CMSSW_BASE/src/RecoEgamma/ElectronIdentification/data/LowPtElectrons
-```
+``` -->
 
-## Add support for GBRForest to parse ROOT files
+<!-- ## Add support for GBRForest to parse ROOT files
 
 ```shell
 git cms-merge-topic -u CMSBParking:convertXMLToGBRForestROOT
-```
+``` -->
 
-## Add the modification needed to use post-fit quantities for electrons  
+<!-- ## Add the modification needed to use post-fit quantities for electrons  
 
 ```shell
 git cms-merge-topic -u CMSBParking:GsfTransientTracks # unsafe checkout (no checkdeps), but suggested here
-```
+``` -->
 
 ## Add the modification needed to use the KinematicParticleVertexFitter  
 
@@ -74,41 +74,3 @@ cmsRun run_nano_cfg.py
 ```
 source setup_env.sh
 ```
-
-## Important: Mass hypothesis
-
-| 1st hypothesis | 2nd hypothesis | 3rd hypothesis | 4thhypothesis |
-|----------------|----------------|----------------|---------------|
-| PROTON         | PROTON         | PION           | KAON          |
-| KAON           | PION           | KAON           | PROTON        |
-| PION           | KAON           | PROTON         | PION          |
-
-## Contributing
-
-We use the _fork and pull_ model:
-
-fork this repository https://github.com/CMSBParking/BParkingNANO (top right _Fork button)
-
-If you haven't done so yet, clone this repository:
-
-```shell
-git clone git@github.com:CMSBParking/BParkingNANO.git  ./PhysicsTools
-```
-
-Add your fork of the repository as remote:
-
-```shell
-git remote add mine git@github.com:`git config user.github`/BParkingNANO.git
-git checkout -b ${USER}_feature_branch origin/master
-```
-
-Work on your feature, `add`, `commit`, etc. and push to your own fork
-
-when adding a sequence or table producer, please include it in the _python/nanoBPark_cff.py_
-and make sure it runs properly checking the output result (_test_BParkSequence_10215.py_ to give it a try)
-
-```shell
-git push mine feature_branch
-```
-
-Make a pull request on github
