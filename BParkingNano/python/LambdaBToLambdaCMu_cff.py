@@ -53,8 +53,7 @@ LambdaBToLambdaCMu = cms.EDProducer(
     postVtxSelection=cms.string(
         'userFloat("sv_prob") > 0.001 '
         '&& userFloat("fitted_cos_theta_2D") >= 0'
-        '&& ( (userFloat("fitted_mass") > 4 && userFloat("fitted_mass") < 7.)')
-)
+        '&& (userFloat("fitted_mass") > 4 && userFloat("fitted_mass") < 7.)'))
 
 ################################### Tables #####################################
 
