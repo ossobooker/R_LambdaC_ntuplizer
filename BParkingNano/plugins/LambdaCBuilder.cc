@@ -99,9 +99,54 @@ void LambdaCBuilder::produce(edm::StreamID, edm::Event &evt, edm::EventSetup con
         auto trk1_p4 = trk1_ptr->polarP4();
         auto trk2_p4 = trk2_ptr->polarP4();
         auto trk3_p4 = trk3_ptr->polarP4();
-        trk1_p4.SetM(PROTON_MASS);
-        trk2_p4.SetM(K_MASS);
-        trk3_p4.SetM(PI_MASS);
+
+        // Is track1 the Kaon?
+        if (trk1_ptr->charge() != trk1_ptr->charge() + trk2_ptr->charge() + trk3_ptr->charge())
+        {
+          trk1_p4.SetM(K_MASS);
+          if (trk2_ptr->pt() > trk3_ptr->pt())
+          {
+            trk2_p4.SetM(PROTON_MASS);
+            trk3_p4.SetM(PI_MASS);
+          }
+          else
+          {
+            trk3_p4.SetM(PROTON_MASS);
+            trk2_p4.SetM(PI_MASS);
+          }
+        }
+
+        // Is track2 the Kaon?
+        if (trk2_ptr->charge() != trk1_ptr->charge() + trk2_ptr->charge() + trk3_ptr->charge())
+        {
+          trk2_p4.SetM(K_MASS);
+          if (trk1_ptr->pt() > trk3_ptr->pt())
+          {
+            trk1_p4.SetM(PROTON_MASS);
+            trk3_p4.SetM(PI_MASS);
+          }
+          else
+          {
+            trk3_p4.SetM(PROTON_MASS);
+            trk1_p4.SetM(PI_MASS);
+          }
+        }
+
+        // Is track3 the Kaon?
+        if (trk3_ptr->charge() != trk1_ptr->charge() + trk2_ptr->charge() + trk3_ptr->charge())
+        {
+          trk3_p4.SetM(K_MASS);
+          if (trk1_ptr->pt() > trk2_ptr->pt())
+          {
+            trk1_p4.SetM(PROTON_MASS);
+            trk2_p4.SetM(PI_MASS);
+          }
+          else
+          {
+            trk2_p4.SetM(PROTON_MASS);
+            trk1_p4.SetM(PI_MASS);
+          }
+        }
 
         //adding stuff for pre fit selection
         lambda_c_cand.setP4(trk1_p4 + trk2_p4 + trk3_p4);
@@ -120,31 +165,13 @@ void LambdaCBuilder::produce(edm::StreamID, edm::Event &evt, edm::EventSetup con
         lambda_c_cand.addUserCand("trk2", trk2_ptr);
         lambda_c_cand.addUserCand("trk3", trk3_ptr);
 
-        //second mass hypothesis
-        trk1_p4.SetM(PROTON_MASS);
-        trk2_p4.SetM(PI_MASS);
-        trk3_p4.SetM(K_MASS);
-        lambda_c_cand.addUserFloat("1barMass", (trk1_p4 + trk2_p4 + trk3_p4).M());
-
-        //THIRD mass hypothesis
-        trk1_p4.SetM(PI_MASS);
-        trk2_p4.SetM(K_MASS);
-        trk3_p4.SetM(PROTON_MASS);
-        lambda_c_cand.addUserFloat("2barMass", (trk1_p4 + trk2_p4 + trk3_p4).M());
-
-        //FORTH mass hypothesis
-        trk1_p4.SetM(K_MASS);
-        trk2_p4.SetM(PROTON_MASS);
-        trk3_p4.SetM(PI_MASS);
-        lambda_c_cand.addUserFloat("3barMass", (trk1_p4 + trk2_p4 + trk3_p4).M());
-
         // selection before fit
         if (!pre_vtx_selection_(lambda_c_cand))
           continue;
 
         KinVtxFitter fitter(
             {ttracks->at(trk1_idx), ttracks->at(trk2_idx), ttracks->at(trk3_idx)},
-            {PROTON_MASS, K_MASS, PI_MASS},
+            {trk1_ptr->mass(), trk2_ptr->mass(), trk3_ptr->mass()},
             {PROTON_SIGMA, K_SIGMA, K_SIGMA} //PROTON, K and PI sigma equals...
         );
         if (!fitter.success())
@@ -158,33 +185,6 @@ void LambdaCBuilder::produce(edm::StreamID, edm::Event &evt, edm::EventSetup con
         lambda_c_cand.addUserFloat("fitted_pt", fitter.fitted_candidate().globalMomentum().perp());
         lambda_c_cand.addUserFloat("fitted_eta", fitter.fitted_candidate().globalMomentum().eta());
         lambda_c_cand.addUserFloat("fitted_phi", fitter.fitted_candidate().globalMomentum().phi());
-
-        // second mass hypothesis
-        auto fitted_trk1 = fitter.daughter_p4(0);
-        auto fitted_trk2 = fitter.daughter_p4(1);
-        auto fitted_trk3 = fitter.daughter_p4(2);
-        fitted_trk1.SetM(PROTON_MASS);
-        fitted_trk2.SetM(PI_MASS);
-        fitted_trk3.SetM(K_MASS);
-        lambda_c_cand.addUserFloat("fitted_1barMass", (fitted_trk1 + fitted_trk2 + fitted_trk3).M());
-
-        // THIRD mass hypothesis
-        fitted_trk1 = fitter.daughter_p4(0);
-        fitted_trk2 = fitter.daughter_p4(1);
-        fitted_trk3 = fitter.daughter_p4(2);
-        fitted_trk1.SetM(PI_MASS);
-        fitted_trk2.SetM(K_MASS);
-        fitted_trk3.SetM(PROTON_MASS);
-        lambda_c_cand.addUserFloat("fitted_2barMass", (fitted_trk1 + fitted_trk2 + fitted_trk3).M());
-
-        // FOURTH mass hypothesis
-        fitted_trk1 = fitter.daughter_p4(0);
-        fitted_trk2 = fitter.daughter_p4(1);
-        fitted_trk3 = fitter.daughter_p4(2);
-        fitted_trk1.SetM(K_MASS);
-        fitted_trk2.SetM(PROTON_MASS);
-        fitted_trk3.SetM(PI_MASS);
-        lambda_c_cand.addUserFloat("fitted_3barMass", (fitted_trk1 + fitted_trk2 + fitted_trk3).M());
 
         // after fit selection
         if (!post_vtx_selection_(lambda_c_cand))
